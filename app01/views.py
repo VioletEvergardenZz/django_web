@@ -21,3 +21,9 @@ def depart_add(request):
     models.Department.objects.create(title=title)
     # 重定向回部门列表
     return redirect('/depart/list/')
+
+'删除部门'
+def depart_delete(request):
+    nid = request.GET.get('nid')
+    models.Department.objects.filter(id=nid).delete()
+    return redirect('/depart/list/')
