@@ -120,3 +120,8 @@ def user_edit(request,nid):
 def user_delete(request,nid):
     models.UserInfo.objects.filter(id=nid).delete()
     return redirect('/user/list/')
+
+'靓号列表'
+def pretty_list(request):
+    queryset = models.PrettyNum.objects.all().order_by('-level')
+    return render(request,'pretty_list.html',{'queryset':queryset})
