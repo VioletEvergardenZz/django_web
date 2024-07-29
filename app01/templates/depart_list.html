@@ -73,14 +73,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th>1</th>
-            <td>销售部</td>
-            <td>
-                <a class="btn btn-primary btn-xs">编辑</a>
-                <a class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
+        {% for obj in queryset %}
+              <tr>
+                <th>{{ obj.id }}</th>
+                <td>{{ obj.title }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs">编辑</a>
+                    <a class="btn btn-danger btn-xs">删除</a>
+                </td>
+              </tr>
+        {% endfor %}
         </tbody>
       </table>
     </div>
