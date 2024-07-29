@@ -40,3 +40,10 @@ def depart_edit(request,nid):
     # 根据id 找到数据库中的数据并进行更新
     models.Department.objects.filter(id=nid).update(title=title)
     return redirect('/depart/list/')
+
+'用户管理'
+def user_list(request):
+    # 获取所有用户列表
+    queryset = models.UserInfo.objects.all()
+
+    return render(request,'user_list.html',{'queryset':queryset})
