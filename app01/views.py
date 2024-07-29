@@ -5,9 +5,11 @@ from app01 import models
 
 '部门列表'
 def depart_list(request):
-
     # 去数据库中获取所有的部门列表
     # [对象,对象,对象]
     queryset = models.Department.objects.all()
-
     return render(request,'depart_list.html',{'queryset':queryset})
+
+'添加部门'
+def depart_add(request):
+    return render(request,'depart_add.html')
