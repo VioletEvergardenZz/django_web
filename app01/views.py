@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from app01 import models
 from django import forms
+from django.core.validators import RegexValidator
 
 # Create your views here.
 
@@ -125,3 +126,31 @@ def user_delete(request,nid):
 def pretty_list(request):
     queryset = models.PrettyNum.objects.all().order_by('-level')
     return render(request,'pretty_list.html',{'queryset':queryset})
+
+class PrettyNumModelForm(forms.ModelForm):
+
+    mobile = forms.CharField(
+        label="手机号",
+        validators=[RegexValidator(r'^1[3-9]\d{9}$','手机号格式错误')]
+    )
+    class Meta:
+        model = models.PrettyNum
+        # fields = '__all__'
+        fields = ['mobile','price','level','status']
+
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        # 循环找到所有的插件 添加了 class ='form-control'
+        for name,field in self.fields.items():
+            field.widget.attrs = {'class':'form-control','placeholder':field.label}
+
+'添加靓号'
+def pretty_add(request):
+    if request.method == "GET":
+        form = PrettyNumModelForm()
+        return render(request,'pretty_add.html',{'form':form})
+    form = PrettyNumModelForm(data=request.POST)
+    if form.is_valid():
+        form.save()
+        return redirect('/pretty/list/')
+    return render(request,'pretty_add.html',{'form':form})

@@ -35,5 +35,6 @@ urlpatterns = [
 
     #靓号管理
     path('pretty/list/', views.pretty_list),
+    path('pretty/add/', views.pretty_add),
 
 ]
