@@ -101,3 +101,10 @@ def user_model_form_add(request):
         return redirect('/user/list/')
     # 校验失败 (在页面上显示错误信息)
     return render(request,'user_model_form_add.html',{'form':form})
+
+'编辑用户'
+def user_edit(request,nid):
+    # 根据ID去数据库获取要编辑的那一行数据
+    row_object = models.UserInfo.objects.filter(id=nid).first()
+    form = UserModelForm(instance=row_object)
+    return render(request,'user_edit.html',{'form':form})
