@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from app01 import models
+from django import forms
 
 # Create your views here.
 
@@ -69,3 +70,23 @@ def user_add(request):
                                    create_time=ctime,gender=gender,depart_id=depart_id)
 
     return redirect('/user/list/')
+
+'添加用户(ModelForm)'
+class UserModelForm(forms.ModelForm):
+    class Meta:
+        model = models.UserInfo
+        fields = ["name","password","age","account","create_time","gender","depart"]
+        # widgets = {
+        #     'name': forms.TextInput(attrs={'class': 'form-control'}),
+        #     'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+        #     'age': forms.TextInput(attrs={'class': 'form-control'}),
+        # }
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        # 循环找到所有的插件 添加了 class ='form-control'
+        for name,field in self.fields.items():
+            field.widget.attrs = {'class':'form-control','placeholder':field.label}
+
+def user_model_form_add(request):
+    form = UserModelForm()
+    return render(request,'user_model_form_add.html',{'form':form})
