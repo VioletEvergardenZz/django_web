@@ -104,7 +104,19 @@ def user_model_form_add(request):
 
 '编辑用户'
 def user_edit(request,nid):
-    # 根据ID去数据库获取要编辑的那一行数据
     row_object = models.UserInfo.objects.filter(id=nid).first()
-    form = UserModelForm(instance=row_object)
+    if request.method == "GET":
+        # 根据ID去数据库获取要编辑的那一行数据
+        form = UserModelForm(instance=row_object)
+        return render(request,'user_edit.html',{'form':form})
+
+    form = UserModelForm(data=request.POST,instance=row_object)
+    if form.is_valid():
+        form.save()
+        return redirect('/user/list/')
     return render(request,'user_edit.html',{'form':form})
+
+'删除用户'
+def user_delete(request,nid):
+    models.UserInfo.objects.filter(id=nid).delete()
+    return redirect('/user/list/')
