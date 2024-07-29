@@ -71,8 +71,9 @@ def user_add(request):
 
     return redirect('/user/list/')
 
-'添加用户(ModelForm)'
+
 class UserModelForm(forms.ModelForm):
+    name = forms.CharField(min_length=2,label="用户名")
     class Meta:
         model = models.UserInfo
         fields = ["name","password","age","account","create_time","gender","depart"]
@@ -87,6 +88,16 @@ class UserModelForm(forms.ModelForm):
         for name,field in self.fields.items():
             field.widget.attrs = {'class':'form-control','placeholder':field.label}
 
+'添加用户(ModelForm)'
 def user_model_form_add(request):
-    form = UserModelForm()
+    if request.method == "GET":
+        form = UserModelForm()
+        return render(request,'user_model_form_add.html',{'form':form})
+    # 用户POST提交数据,数据校验
+    form = UserModelForm(data=request.POST)
+    if form.is_valid():
+        # 如果数据合法,保存到数据库
+        form.save()
+        return redirect('/user/list/')
+    # 校验失败 (在页面上显示错误信息)
     return render(request,'user_model_form_add.html',{'form':form})
