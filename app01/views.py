@@ -125,8 +125,12 @@ def user_delete(request,nid):
 
 '靓号列表'
 def pretty_list(request):
-    queryset = models.PrettyNum.objects.all().order_by('-level')
-    return render(request,'pretty_list.html',{'queryset':queryset})
+    data_dict = {}
+    search_data = request.GET.get('q', "")
+    if search_data:
+        data_dict["mobile__contains"] = search_data
+    queryset = models.PrettyNum.objects.filter(**data_dict).order_by('-level')
+    return render(request,'pretty_list.html',{'queryset':queryset,"search_data":search_data})
 
 class PrettyNumModelForm(forms.ModelForm):
     # 验证:方式1
