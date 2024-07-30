@@ -1,4 +1,8 @@
 {% extends 'layout.html' %}
+{#{% load static %}#}
+{#{% block css %}#}
+{#    <link rel="stylesheet" href="{% static 'plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}">#}
+{#{% endblock %}#}
 
 {% block content %}
     <div class="container">
@@ -23,4 +27,20 @@
         </div>
     </div>
 {% endblock %}
+
+{#{% block js %}#}
+{#    <script src="{% static 'plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>#}
+{#    <script src="{% static 'plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js' %}"></script>#}
+{#    <script>#}
+{#        $(function (){#}
+{#            $('#id_create_time').datepicker({#}
+{#                format: 'yyyy-mm-dd',#}
+{#                startDate: '0',#}
+{#                language: 'zh-CN',#}
+{#                autoclose: true#}
+{#            });#}
+{#        })#}
+{#    </script>#}
+{##}
+{#{% endblock %}#}
 

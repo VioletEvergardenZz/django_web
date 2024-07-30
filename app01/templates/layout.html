@@ -10,6 +10,7 @@
             border-radius: 0;
         }
     </style>
+    {% block css %}{% endblock %}
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -48,14 +49,11 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-
-
 <div>
     {% block content %}{% endblock %}
 </div>
-
-
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+    {% block js %}{% endblock %}
 </body>
 </html>
