@@ -146,11 +146,12 @@ class PrettyNumModelForm(forms.ModelForm):
             field.widget.attrs = {'class':'form-control','placeholder':field.label}
 
     # 验证:方式二
-    # def clean_mobile(self):
-    #     txt_mobile = self.cleaned_data['mobile']
-    #     if len(str(txt_mobile)) != 11:
-    #         raise ValidationError("格式错误")
-    #     return txt_mobile
+    def clean_mobile(self):
+        txt_mobile = self.cleaned_data['mobile']
+        exists = models.PrettyNum.objects.filter(mobile=txt_mobile).exists()
+        if exists:
+            raise ValidationError("手机号已存在")
+        return txt_mobile
 
 '添加靓号'
 def pretty_add(request):
@@ -162,3 +163,43 @@ def pretty_add(request):
         form.save()
         return redirect('/pretty/list/')
     return render(request,'pretty_add.html',{'form':form})
+
+
+class PrettyNumEditModelForm(forms.ModelForm):
+    # mobile = forms.CharField(disabled=True,label="手机号")
+    mobile = forms.CharField(
+        label="手机号",
+        validators=[RegexValidator(r'^1[3-9]\d{9}$', '手机号格式错误')]
+    )
+    class Meta:
+        model = models.PrettyNum
+        fields = ['mobile','price','level','status']
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        # 循环找到所有的插件 添加了 class ='form-control'
+        for name,field in self.fields.items():
+            field.widget.attrs = {'class':'form-control','placeholder':field.label}
+    def clean_mobile(self):
+        txt_mobile = self.cleaned_data['mobile']
+        exists = models.PrettyNum.objects.exclude(id = self.instance.pk).filter(mobile=txt_mobile).exists()
+        if exists:
+            raise ValidationError("手机号已存在")
+        return txt_mobile
+
+'编辑靓号'
+def pretty_edit(request,nid):
+    row_object = models.PrettyNum.objects.filter(id=nid).first()
+    if request.method == "GET":
+        form = PrettyNumEditModelForm(instance=row_object)
+        return render(request,'pretty_edit.html',{'form':form})
+    form = PrettyNumEditModelForm(data=request.POST,instance=row_object)
+    if form.is_valid():
+        form.save()
+        return redirect('/pretty/list/')
+    return render(request,'pretty_edit.html',{'form':form})
+
+'删除靓号'
+def pretty_delete(request,nid):
+    models.PrettyNum.objects.filter(id=nid).delete()
+    return redirect('/pretty/list/')
+
