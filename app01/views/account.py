@@ -37,3 +37,8 @@ def login(request):
 
     return render(request, 'login.html', {'form': form})
 
+'注销'
+def logout(request):
+    request.session.clear()
+    return redirect("/login/")
+
