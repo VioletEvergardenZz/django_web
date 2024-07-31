@@ -47,5 +47,6 @@ urlpatterns = [
     # 登录
     path('login/', account.login),
     path('logout/', account.logout),
+    path('image/code/', account.image_code),
 
 ]

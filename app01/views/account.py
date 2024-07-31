@@ -3,6 +3,8 @@ from django import forms
 from app01 import models
 from app01.utils.encrypt import md5
 from app01.utils.bootstrap import BootStrapForm
+from app01.utils.code import check_code
+from io import BytesIO
 
 class LoginForm(BootStrapForm):
     username = forms.CharField(
@@ -12,6 +14,11 @@ class LoginForm(BootStrapForm):
     password = forms.CharField(
         label="密码",
         widget=forms.PasswordInput(render_value=True),
+    )
+    code = forms.CharField(
+        label="验证码",
+        widget=forms.TextInput,
+        required=True
     )
     def clean_password(self):
         pwd = self.cleaned_data.get("password")
@@ -36,6 +43,14 @@ def login(request):
         return redirect("/admin/list/")
 
     return render(request, 'login.html', {'form': form})
+
+'生成图片验证码'
+def image_code(request):
+    # 调佣pillow函数
+    img,code_string = check_code()
+    stream = BytesIO()
+    img.save(stream, 'png')
+    return HttpResponse(stream.getvalue())
 
 '注销'
 def logout(request):
