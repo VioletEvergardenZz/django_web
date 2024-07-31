@@ -2,6 +2,12 @@ from django.db import models
 
 # Create your models here.
 
+
+'管理员'
+class Admin(models.Model):
+    username = models.CharField(verbose_name="管理员",max_length=32)
+    password = models.CharField(verbose_name="密码",max_length=64)
+
 '部门表'
 class Department(models.Model):
     title = models.CharField(verbose_name='标题',max_length=32)
