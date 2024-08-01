@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-
+from django.forms import ModelForm, Form
+from django import forms
+from app01 import models
 
 '数据统计页面'
 def chart_list(request):
@@ -78,4 +80,19 @@ def chart_line(request):
     }
     return JsonResponse(result)
 
+class TTModelForm(ModelForm):
+    class Meta:
+        model = models.XX
+        fields = "__all__"
+
+
+def tt(request):
+    instance = models.XX.objects.all().first()
+    if request.method == "GET":
+        form = TTModelForm(instance=instance)
+        return render(request, 'tt.html', {"form": form})
+    form = TTModelForm(data=request.POST, files=request.FILES)
+    if form.is_valid():
+        form.save()
+    return render(request, 'tt.html', {"form": form})
 

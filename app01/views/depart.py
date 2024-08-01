@@ -45,3 +45,22 @@ def depart_edit(request,nid):
     # 根据id 找到数据库中的数据并进行更新
     models.Department.objects.filter(id=nid).update(title=title)
     return redirect('/depart/list/')
+
+'批量删除（Excel文件）'
+def depart_multi(request):
+    from openpyxl import load_workbook
+    # 1.获取用户上传的文件对象
+    file_object = request.FILES.get("exc")
+
+    # 2.对象传递给openpyxl，由openpyxl读取文件的内容
+    wb = load_workbook(file_object)
+    sheet = wb.worksheets[0]
+
+    # 3.循环获取每一行数据
+    for row in sheet.iter_rows(min_row=2):
+        text = row[0].value
+        exists = models.Department.objects.filter(title=text).exists()
+        if not exists:
+            models.Department.objects.create(title=text)
+
+    return redirect('/depart/list/')

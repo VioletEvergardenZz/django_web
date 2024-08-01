@@ -2,6 +2,7 @@ from django import forms
 
 class BootStrap:
     bootstrap_exclude_fields = []
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # 循环ModelForm中的所有字段，给每个字段的插件设置

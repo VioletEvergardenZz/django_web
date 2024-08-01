@@ -14,15 +14,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
-from app01.views import depart,user,pretty,admin,account,task,order,chart
+from django.contrib import admin
+from django.urls import path, re_path
+from django.views.static import serve
+from django.conf import settings
+from app01.views import depart, user, pretty, admin, account, task, order, chart, upload,city
 
 urlpatterns = [
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
+    path('tt/', chart.tt),
+
     # 部门管理
     path('depart/list/', depart.depart_list),
     path('depart/add/', depart.depart_add),
     path('depart/delete/', depart.depart_delete),
     path('depart/<int:nid>/edit/',depart.depart_edit),
+    path('depart/multi/',depart.depart_multi),
 
     # 用户管理
     path('user/list/', user.user_list),
@@ -67,6 +74,14 @@ urlpatterns = [
     path('chart/pie/', chart.chart_pie),
     path('chart/line/', chart.chart_line),
 
+    # 上传文件
+    path('upload/list/', upload.upload_list),
+    path('upload/form/', upload.upload_form),
+    path('upload/modal/form/', upload.upload_modal_form),
+
+    # 城市列表
+    path('city/list/', city.city_list),
+    path('city/add/', city.city_add),
 
 
 ]

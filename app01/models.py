@@ -2,6 +2,9 @@ from django.db import models
 
 # Create your models here.
 
+class XX(models.Model):
+    title = models.CharField(verbose_name="名称", max_length=32)
+    image = models.FileField(verbose_name="头像", upload_to="avatar/")
 
 '管理员'
 class Admin(models.Model):
@@ -70,5 +73,20 @@ class Order(models.Model):
     status = models.SmallIntegerField(verbose_name="状态", choices=status_choices, default=1)
     # admin_id
     admin = models.ForeignKey(verbose_name="管理员", to="Admin", on_delete=models.CASCADE)
+
+'老板'
+class Boss(models.Model):
+    name = models.CharField(verbose_name="姓名", max_length=32)
+    age = models.IntegerField(verbose_name="年龄")
+    img = models.CharField(verbose_name="头像", max_length=128)
+
+'城市'
+class City(models.Model):
+
+    name = models.CharField(verbose_name="名称", max_length=32)
+    count = models.IntegerField(verbose_name="人口")
+
+    # 本质上数据库也是CharField，自动保存数据。
+    img = models.FileField(verbose_name="Logo", max_length=128, upload_to='city/')
 
 
